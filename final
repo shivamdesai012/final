@@ -1,0 +1,97 @@
+import java.sql.*;
+
+public class ACIDTransaction {
+  
+   public static void main(String[] args) throws SQLException {
+      
+       Connection con = null; // variable for getting connection
+       Statement stmt = null; // variable for query Execution
+       ResultSet rs = null; // variable for saving query result
+      
+       String url = "jdbc:mysql://localhost:3306/";
+       String driver = "com.mysql.jdbc.Driver";
+       String databaseName = "Chegg";
+       String userName = "root";
+       String userPass = "root";
+      
+       try {
+           // Loading Driver
+           //This is the first step for getting connection with SQL.
+           Class.forName(driver);
+       }
+      
+       catch (ClassNotFoundException e) {
+           System.out.println(e.toString());
+       }
+      
+      
+       try {
+           // Getting the Connection to the database mentioned.
+           con = DriverManager.getConnection(url + databaseName, userName,userPass);
+          
+           // Creating the Statement for query execution
+           stmt = con.createStatement();
+          
+           // creating Query String to display Product details
+           String query = "SELECT * FROM product";
+          
+           // excecuting query
+           rs = stmt.executeQuery(query);
+          
+           while (rs.next()) {
+               // Displaying data of tables
+               System.out.println("#Prod " + rs.getString(1) + ", pName "
+                       + rs.getString(2) + ", Price "
+                       + rs.getDouble(3));
+           }
+          
+           rs.close();
+          
+           // creating Query String to display Depot details
+           query = "SELECT * FROM depot";
+             
+           // excecuting query
+               rs = stmt.executeQuery(query);
+              
+               while (rs.next()) {
+                   // Displaying data of tables
+                   System.out.println("#dep " + rs.getString(1) + ", addr "
+                           + rs.getString(2) + ", Volume "
+                           + rs.getInt(3));
+               }
+              
+               rs.close();
+              
+               // creating Query String to display Stock details
+               query = "SELECT * FROM stock";
+                 
+               // excecuting query
+                   rs = stmt.executeQuery(query);
+                  
+                   while (rs.next()) {
+                       // Displaying data of tables
+                       System.out.println("#prod " + rs.getString(1) + ", #dep "
+                               + rs.getString(2) + ", quantity "
+                               + rs.getInt(3));
+                   }
+             
+          
+           DatabaseMetaData db = con.getMetaData();
+           if (db.supportsTransactionIsolationLevel(Connection.TRANSACTION_SERIALIZABLE)) {
+               //Getting the isolation level which is one of the ACID prperties.
+               System.out.println("Transaction Isolation level= "+ con.getTransactionIsolation());
+              
+           }
+          
+          
+       } catch (Exception e) {
+           System.out.println(e.toString());
+       } finally {
+           // We have to close every thing after dealing with them.
+           //If not we have face some connection issues later.
+           con.close();
+           stmt.close();
+           rs.close();
+       }
+   }
+}
