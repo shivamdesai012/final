@@ -10,7 +10,7 @@ public class ACIDTransaction {
       
        String url = "jdbc:mysql://localhost:3306/";
        String driver = "com.mysql.jdbc.Driver";
-       String databaseName = "Chegg";
+       String databaseName = "product";
        String userName = "root";
        String userPass = "root";
       
